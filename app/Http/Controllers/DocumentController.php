@@ -28,29 +28,23 @@ class DocumentController extends Controller
         return view('documents.create', compact('entreprises', 'clients'));
     }
 
-   public function store(Request $request, Document $document)
-{
-    $request->validate([
-        'designation' => 'required|string',
-        'quantite' => 'required|integer|min:1',
-        'prix_unitaire' => 'required|numeric|min:0',
-    ]);
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'type' => 'required|in:devis,facture',
+            'reference' => 'required|string|max:255',
+            'date' => 'required|date',
+            'entreprise_client_id' => 'required|exists:entreprise_clients,id',
+            'client_final_id' => 'required|exists:client_finals,id',
+            'montant_total' => 'nullable|numeric',
+            'statut' => 'nullable|string',
+        ]);
 
-    $total = $request->quantite * $request->prix_unitaire;
+        $document = Document::create($validated);
 
-    $document->lignes()->create([
-        'designation' => $request->designation,
-        'quantite' => $request->quantite,
-        'prix_unitaire' => $request->prix_unitaire,
-        'total' => $total,
-    ]);
+        return redirect()->route('lignes.create', $document)->with('success', 'Document créé. Ajoutez les lignes.');
+    }
 
-    // Mettre à jour le montant total du document
-    $document->montant_total = $document->lignes()->sum('total');
-    $document->save();
-
-    return redirect()->route('documents.show', $document)->with('success', 'Ligne ajoutée avec succès.');
-}
 
     public function show(Document $document)
     {

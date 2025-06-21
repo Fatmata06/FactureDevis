@@ -17,6 +17,7 @@ Route::get('/', function () {
 });
 
 
+
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
 
@@ -60,6 +61,8 @@ Route::post('/devis', [QuoteController::class, 'store'])->name('quotes.store');
 Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
 Route::get('/clients/creer', [ClientController::class, 'create'])->name('clients.create');
 Route::post('/clients', [ClientController::class, 'store'])->name('clients.store');
+
+
 
 
 require __DIR__.'/auth.php';
