@@ -81,6 +81,11 @@
                         <div class="text-red-500 text-sm">{{ $message }}</div>
                     @enderror
                 </div>
+                <div class="form-group">
+    <label for="main_oeuvre">Main d'œuvre (FCFA)</label>
+    <input type="number" step="0.01" name="main_oeuvre" class="form-control" value="{{ old('main_oeuvre', $document->main_oeuvre ?? 0) }}">
+</div>
+
 
                 {{-- Statut --}}
                 <div>

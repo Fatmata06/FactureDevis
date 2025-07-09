@@ -78,9 +78,35 @@ class DocumentController extends Controller
     }
 
     public function pdf(Document $document)
-    {
-        $document->load('lignes', 'entreprise', 'client');
-        $pdf = Pdf::loadView('documents.pdf', compact('document'));
-        return $pdf->download("{$document->type}-{$document->reference}.pdf");
-    }
+{
+    // Calcule total des lignes produits
+$totalMateriel = $document->lignes()
+    ->where('type', 'produit')
+    ->get()
+    ->sum(function($ligne) {
+        return $ligne->prix_unitaire * $ligne->quantite;
+    });
+
+// Main d’œuvre saisie manuellement
+$mainOeuvre = $document->main_oeuvre ?? 0;
+
+// Montant final
+$montantTotal = $totalMateriel + $mainOeuvre;
+
+    $montantLettre = $this->convertirMontantEnLettres($totalGeneral);
+
+    $pdf = Pdf::loadView('documents.pdf', compact('document', 'totalMateriel', 'totalMainOeuvre', 'totalGeneral', 'montantLettre'));
+    
+    return $pdf->download("Facture_{$document->reference}.pdf");
+}
+  private function convertirMontantEnLettres($montant)
+{
+    $f = new \NumberToWords\NumberToWords();
+
+    $numberTransformer = $f->getNumberTransformer('fr');
+    return ucfirst($numberTransformer->toWords($montant));
+}
+
+
+
 }

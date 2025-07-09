@@ -43,6 +43,10 @@
                         <label for="date" class="block font-medium text-sm text-gray-700">Date</label>
                         <input type="date" name="date" id="date" value="{{ $document->date }}" class="mt-1 block w-full" required>
                     </div>
+<div class="form-group">
+    <label for="main_oeuvre">Main d'œuvre (FCFA)</label>
+    <input type="number" step="0.01" name="main_oeuvre" class="form-control" value="{{ old('main_oeuvre', $document->main_oeuvre ?? 0) }}">
+</div>
 
                     <div class="mb-4">
                         <label for="statut" class="block font-medium text-sm text-gray-700">Statut</label>

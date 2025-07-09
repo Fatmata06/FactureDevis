@@ -52,7 +52,7 @@
 
     <!-- Footer collé en bas -->
     <footer class="bg-gray-100 text-center text-sm text-gray-500 py-4 shadow-inner">
-        &copy; {{ date('Y') }} - Application Laravel Devis & Factures. Tous droits réservés.
+        &copy; {{ date('Y') }} - FatmataDev - Devis & Factures. Tous droits réservés.
     </footer>
 
 </body>
