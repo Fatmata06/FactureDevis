@@ -31,7 +31,7 @@
                             <td class="border p-2">{{ $client->id }}</td>
                             <td class="border p-2">{{ $client->nom }}</td>
                             <td class="border p-2">{{ $client->prenom }}</td>
-                            <td class="border p-2">{{ $client->entrepriseClient->nom ?? '—' }}</td>
+                            <td class="border p-2">{{ $client->entreprise->nom ?? '-'  }}</td>
                             <td class="border p-2">
                                 <a href="{{ route('clients_finaux.edit', $client) }}" class="text-blue-600 hover:underline mr-2">Modifier</a>
 

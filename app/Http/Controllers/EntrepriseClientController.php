@@ -8,9 +8,27 @@ use Illuminate\Http\Request;
 class EntrepriseClientController extends Controller
 {
     // Afficher la liste de tous les EntrepriseClient
-    public function index()
+    public function index(Request $request)
     {
-        $entreprises = EntrepriseClient::where('agence_id', auth()->user()->agence_id)->paginate(10);
+        $query = EntrepriseClient::where('agence_id', auth()->user()->agence_id);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nom', 'like', "%$search%")
+                  ->orWhere('domaine', 'like', "%$search%")
+                  ->orWhere('email', 'like', "%$search%")
+                  ->orWhere('adresse', 'like', "%$search%")
+                  ->orWhere('telephone', 'like', "%$search%");
+            });
+        }
+
+        if ($request->filled('domaine')) {
+            $query->where('domaine', $request->domaine);
+        }
+
+        $entreprises = $query->orderBy('created_at', 'desc')->paginate(10)->appends($request->query());
+
         return view('entreprise_clients.index', compact('entreprises'));
     }
 
