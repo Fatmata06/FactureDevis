@@ -1,42 +1,70 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-2xl text-gray-900 dark:text-white leading-tight flex items-center gap-2">
-            {{ __('Tableau de bord') }}
-        </h2>
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-tachometer-alt text-white text-lg"></i>
+                </div>
+                <h2 class="font-bold text-2xl text-gray-800 dark:text-gray-200 leading-tight">
+                    Tableau de bord
+                </h2>
+            </div>
+           
+        </div>
     </x-slot>
 
-    <div class="py-12 bg-gradient-to-br from-indigo-50 via-white to-blue-100 min-h-screen">
+    <!-- Font Awesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .stat-card { background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%); }
+        .stat-card-dark { background: linear-gradient(135deg, #1e293b 0%, #312e81 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+        .table-row { transition: all 0.2s ease; }
+        .table-row:hover { background: linear-gradient(90deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%); }
+    </style>
+
+    <div class="py-8 bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-10">
 
-            <!-- Résumé des stats -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-5 flex flex-col items-center">
-                    <div class="bg-indigo-100 p-2 rounded-full mb-2">
-                        <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2a4 4 0 018 0v2M5 10a4 4 0 118 0 4 4 0 01-8 0z"/></svg>
+            <!-- Stat Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card dark:stat-card-dark rounded-2xl p-6 flex items-center space-x-4 shadow card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-file-invoice-dollar text-white text-2xl"></i>
                     </div>
-                    <h3 class="text-base font-semibold text-gray-700 dark:text-gray-200">Devis en attente</h3>
-                    <p class="mt-1 text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ $pendingQuotes }}</p>
+                    <div>
+                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $pendingQuotes }}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-300">Devis en attente</div>
+                    </div>
                 </div>
-                <div class="bg-white dark:bg-gray-700 rounded-xl shadow p-5 flex flex-col items-center">
-                    <div class="bg-red-100 p-2 rounded-full mb-2">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-1.414 1.414M6.343 17.657l-1.414-1.414M5.636 5.636l1.414 1.414M17.657 17.657l1.414-1.414M12 8v4m0 4h.01"/></svg>
+                <div class="stat-card dark:stat-card-dark rounded-2xl p-6 flex items-center space-x-4 shadow card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-red-400 to-red-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-file-invoice text-white text-2xl"></i>
                     </div>
-                    <h3 class="text-base font-semibold text-gray-700 dark:text-gray-200">Factures impayées</h3>
-                    <p class="mt-1 text-2xl font-bold text-red-600 dark:text-red-400">{{ $unpaidInvoices }}</p>
+                    <div>
+                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $unpaidInvoices }}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-300">Factures impayées</div>
+                    </div>
                 </div>
-                <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6 flex flex-col items-center hover:scale-105 transition-transform">
-                    <div class="bg-green-100 p-3 rounded-full mb-3">
-                        <svg class="w-7 h-7 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 0V4m0 16v-4"/></svg>
+                <div class="stat-card dark:stat-card-dark rounded-2xl p-6 flex items-center space-x-4 shadow card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-coins text-white text-2xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Chiffre d'affaires (mois)</h3>
-                    <p class="mt-2 text-3xl font-bold text-green-600 dark:text-green-400">{{ number_format($monthlyRevenue, 0, ',', ' ') }} </p>
+                    <div>
+                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ number_format($monthlyRevenue, 0, ',', ' ') }}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-300">Chiffre d'affaires (mois)</div>
+                    </div>
                 </div>
-                <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg p-6 flex flex-col items-center hover:scale-105 transition-transform">
-                    <div class="bg-blue-100 p-3 rounded-full mb-3">
-                        <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87M16 3.13a4 4 0 010 7.75M8 3.13a4 4 0 000 7.75"/></svg>
+                <div class="stat-card dark:stat-card-dark rounded-2xl p-6 flex items-center space-x-4 shadow card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-users text-white text-2xl"></i>
                     </div>
-                    <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Clients actifs</h3>
-                    <p class="mt-2 text-3xl font-bold text-blue-600 dark:text-blue-400">{{ $activeClients }}</p>
+                    <div>
+                        <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $activeClients }}</div>
+                        <div class="text-sm text-gray-500 dark:text-gray-300">Clients actifs</div>
+                    </div>
                 </div>
             </div>
 

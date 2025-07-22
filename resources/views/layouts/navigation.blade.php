@@ -1,5 +1,5 @@
 <!-- resources/views/layouts/navigation.blade.php -->
-<aside x-data="{ open: true }" class="w-64 min-h-screen bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col">
+<aside x-data="{ open: true }" class="w-64 min-h-screen bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 flex flex-col fixed top-0 left-0 z-40 h-screen">
     <!-- Logo -->
     <div class="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-700">
         <a href="{{ route('dashboard') }}">
@@ -34,18 +34,19 @@
     </nav>
 
     <!-- Footer / Logout -->
-    <div class="mt-auto px-4 py-4 border-t border-gray-200 dark:border-gray-700">
-        <div class="text-sm text-gray-500 dark:text-gray-400 mb-2">
-            {{ Auth::user()->name }}<br>
-            <span class="text-xs">{{ Auth::user()->email }}</span>
+    <div class="mt-auto px-4 py-6 border-t border-gray-200 dark:border-gray-700 flex flex-col items-center">
+        <div class="flex flex-col items-center mb-3">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center shadow">
+                <i class="fas fa-user text-white text-2xl"></i>
+            </div>
+            <div class="text-base font-bold text-gray-700 dark:text-gray-200 mt-2">{{ Auth::user()->name }}</div>
+            <span class="text-xs text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</span>
         </div>
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="{{ route('logout') }}" class="w-full flex justify-center">
             @csrf
-            <x-nav-link :href="route('logout')"
-                        onclick="event.preventDefault(); this.closest('form').submit();"
-                        class="text-red-500 dark:text-red-400 hover:underline">
-                🚪 Déconnexion
-            </x-nav-link>
+            <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-300 font-semibold hover:bg-red-200 dark:hover:bg-red-800 transition">
+                <i class="fas fa-sign-out-alt"></i> Déconnexion
+            </button>
         </form>
     </div>
 </aside>

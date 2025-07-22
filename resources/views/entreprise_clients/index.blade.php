@@ -1,116 +1,99 @@
 <x-app-layout>
     <x-slot name="header">
-        <!-- Enhanced header with improved styling and animation -->
-        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <div class="flex items-center justify-between">
             <div class="flex items-center space-x-3">
-                <div class="bg-gradient-to-r from-blue-600 to-teal-500 rounded-lg p-2 shadow-lg">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                    </svg>
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-building text-white text-lg"></i>
                 </div>
-                <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white tracking-wide bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
-                    Liste des entreprises clientes
+                <h2 class="font-bold text-2xl text-gray-800 dark:text-gray-200 leading-tight">
+                    Liste des Entreprises Clientes
                 </h2>
             </div>
-            <a href="{{ route('entreprise_clients.create') }}" class="group flex items-center bg-gradient-to-r from-blue-600 to-teal-500 hover:from-blue-700 hover:to-teal-600 text-white font-bold px-6 py-3 rounded-lg shadow-xl transition-all duration-300 ease-out transform hover:-translate-y-1 hover:shadow-2xl">
-                <svg class="w-5 h-5 mr-2 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
-                </svg>
-                <span class="relative">
-                    Ajouter une entreprise
-                    <span class="absolute bottom-0 left-0 w-0 group-hover:w-full h-0.5 bg-white transition-all duration-300"></span>
-                </span>
-            </a>
+           
         </div>
     </x-slot>
+
+    <!-- Font Awesome CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
+        .btn-primary { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transition: all 0.3s ease; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(102,126,234,0.4); }
+        .table-row { transition: all 0.2s ease; }
+        .table-row:hover { background: linear-gradient(90deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%); }
+        .success-alert { background: linear-gradient(135deg, #10b981 0%, #059669 100%); animation: slideIn 0.5s ease-out; }
+        @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .action-btn { transition: all 0.2s ease; }
+        .action-btn:hover { transform: scale(1.05); }
+        .empty-state { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); }
+        .search-container { position: relative; }
+        .search-input { transition: all 0.3s ease; }
+        .search-input:focus { box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
+        .stat-card { background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 100%); }
+        .stat-card-dark { background: linear-gradient(135deg, #1e293b 0%, #312e81 100%); }
+    </style>
     <!-- Main container with improved styling -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-8 overflow-x-hidden">
         <!-- Stats summary cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <!-- Total companies -->
-            <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg p-6 border border-blue-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-blue-500 bg-opacity-20">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 dark:text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                    </div>
-                    <div class="ml-5">
-                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">Total Entreprises</h3>
-                        <div class="flex items-baseline">
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $entreprises->total() }}</p>
-                            <p class="ml-2 text-sm text-gray-600 dark:text-gray-400">entreprises</p>
-                        </div>
-                    </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card dark:stat-card-dark rounded-2xl p-6 flex items-center space-x-4 shadow card-hover">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-building text-white text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $entreprises->total() }}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-300">Entreprises clientes</div>
                 </div>
             </div>
-
-            <!-- Active domains -->
-            <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg p-6 border border-emerald-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-emerald-500 bg-opacity-20">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <div class="ml-5">
-                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">Domaines d'activité</h3>
-                        <div class="flex items-baseline">
-                            <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $entreprises->unique('domaine')->count() }}</p>
-                            <p class="ml-2 text-sm text-gray-600 dark:text-gray-400">secteurs</p>
-                        </div>
-                    </div>
+            <div class="stat-card dark:stat-card-dark rounded-2xl p-6 flex items-center space-x-4 shadow card-hover">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-layer-group text-white text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $entreprises->unique('domaine')->count() }}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-300">Domaines d'activité</div>
                 </div>
             </div>
-
-            <!-- Last added -->
-            <div class="bg-gradient-to-br from-violet-50 to-violet-100 dark:from-gray-800 dark:to-gray-900 rounded-xl shadow-lg p-6 border border-violet-200 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
-                <div class="flex items-center">
-                    <div class="p-3 rounded-full bg-violet-500 bg-opacity-20">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-violet-600 dark:text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </div>
-                    <div class="ml-5">
-                        <h3 class="text-lg font-medium text-gray-700 dark:text-gray-300">Dernière ajoutée</h3>
-                        <div class="flex items-baseline">
-                            <p class="text-lg font-bold text-gray-900 dark:text-white truncate max-w-[150px]">
-                                {{ $entreprises->first() ? $entreprises->sortByDesc('created_at')->first()->nom : 'Aucune' }}
-                            </p>
-                        </div>
-                    </div>
+            <div class="stat-card dark:stat-card-dark rounded-2xl p-6 flex items-center space-x-4 shadow card-hover">
+                <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-user-plus text-white text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $entreprises->where('created_at', '>=', now()->startOfMonth())->count() }}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-300">Ajoutées ce mois</div>
+                </div>
+            </div>
+            <div class="stat-card dark:stat-card-dark rounded-2xl p-6 flex items-center space-x-4 shadow card-hover">
+                <div class="w-12 h-12 bg-gradient-to-br from-pink-400 to-pink-600 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-user-check text-white text-2xl"></i>
+                </div>
+                <div>
+                    <div class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $entreprises->where('created_at', '>=', now()->startOfDay())->count() }}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-300">Ajoutées aujourd'hui</div>
                 </div>
             </div>
         </div>
-        <!-- Enhanced search and filter bar -->
-        <div class="mb-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4">
-            <form action="{{ route('entreprise_clients.index') }}" method="GET" class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-                <div class="flex-1">
-                    <div class="relative rounded-md shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                            </svg>
-                        </div>
-                        <input type="text" name="search" value="{{ request('search') }}" class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-3 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md" placeholder="Rechercher une entreprise...">
-                    </div>
-                </div>
-                <div class="w-full md:w-1/4">
-                    <select name="domaine" class="focus:ring-blue-500 focus:border-blue-500 block w-full p-3 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md">
-                        <option value="">Tous les domaines</option>
-                        @foreach($entreprises->unique('domaine')->pluck('domaine') as $domaine)
-                            <option value="{{ $domaine }}" {{ request('domaine') == $domaine ? 'selected' : '' }}>{{ $domaine }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <button type="submit" class="inline-flex justify-center py-3 px-6 border border-transparent shadow-sm rounded-md font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                    </svg>
-                    Filtrer
-                </button>
-            </form>
+        <!-- Action Bar -->
+        <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div class="flex items-center space-x-4">
+                <a href="{{ route('entreprise_clients.create') }}" class="btn-primary text-white px-6 py-3 rounded-xl font-medium shadow-lg flex items-center space-x-2 no-underline">
+                    <i class="fas fa-plus"></i>
+                    <span>Ajouter une Entreprise</span>
+                </a>
+               
+            </div>
+            <!-- Search Bar -->
+            <div class="search-container">
+                <form method="GET" action="{{ route('entreprise_clients.index') }}">
+                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher une entreprise..." class="search-input pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent w-80 shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                </form>
+            </div>
         </div>
+
 
         <!-- Success message with animation -->
         @if(session('success'))
@@ -128,14 +111,10 @@
         @endif
         <!-- Main content card with improved styling -->
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-gray-700 transition-all duration-300">
-            <!-- Table header with gradient -->
-            <div class="bg-gradient-to-r from-blue-600 to-teal-500 px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 class="text-xl font-bold text-white">Répertoire des entreprises</h2>
-            </div>
-
+         
             <!-- Enhanced table -->
-            <div>
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <div class="overflow-x-auto max-w-full">
+                <table class="min-w-full w-full divide-y divide-gray-200 dark:divide-gray-700 table-fixed">
                     <thead class="bg-gray-50 dark:bg-gray-700">
                         <tr>
                             <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nom</th>
