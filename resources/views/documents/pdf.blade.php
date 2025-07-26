@@ -76,34 +76,46 @@
                 </tr>
             @endforeach
 
-            @php
-                $totalMateriel = $document->lignes->where('type', 'materiel')->sum(fn($l) => $l->quantite * $l->prix_unitaire);
-                $totalMainOeuvre = $document->lignes->where('type', 'main_oeuvre')->sum(fn($l) => $l->quantite * $l->prix_unitaire);
-                $totalGeneral = $totalMateriel + $totalMainOeuvre;
-            @endphp
+     @php
+    $totalMateriel = 0;
 
-            <tr class="totaux">
-                <td colspan="3" class="text-right">Total Matériel</td>
-                <td>{{ number_format($totalMateriel, 0, ',', ' ') }}</td>
-            </tr>
-            <tr class="totaux">
-                <td colspan="3" class="text-right">Main d’œuvre</td>
-                <td>{{ number_format($totalMainOeuvre, 0, ',', ' ') }}</td>
-            </tr>
-            <tr class="totaux">
-                <td colspan="3" class="text-right">Total</td>
-                <td>{{ number_format($totalGeneral, 0, ',', ' ') }}</td>
-            </tr>
+    foreach ($document->lignes as $ligne) {
+        $montant = $ligne->quantite * $ligne->prix_unitaire;
+        $totalMateriel += $montant;
+    }
+
+    $totalMainOeuvre = $document->main_oeuvre ?? 0;
+
+    $totalGeneral = $totalMateriel + $totalMainOeuvre;
+@endphp
+
+
+    $totalGeneral = $totalMateriel + $totalMainOeuvre;
+@endphp
+
+
+
+         <tr>
+    <td colspan="3" style="text-align: right;"><strong>Total Matériel</strong></td>
+    <td>{{ number_format($totalMateriel, 0, ',', ' ') }}</td>
+</tr>
+<tr>
+    <td colspan="3" style="text-align: right;"><strong>Main d’œuvre</strong></td>
+    <td>{{ number_format($totalMainOeuvre, 0, ',', ' ') }}</td>
+</tr>
+<tr>
+    <td colspan="3" style="text-align: right;"><strong>Total</strong></td>
+    <td>{{ number_format($totalGeneral, 0, ',', ' ') }}</td>
+</tr>
+
+
         </tbody>
     </table>
 
     <br><br>
 
-    <p>
-    Arrêté la présente facture à la somme de 
-    <strong>{{ $montantLettre }}</strong>
-    ({{ number_format($totalGeneral, 0, ',', ' ') }}) francs CFA.
-</p>
+    <p>Arrêté la présente facture à la somme de <strong>{{ ucfirst($montantLettre) }}</strong> francs CFA.</p>
+
 
 
 </body>

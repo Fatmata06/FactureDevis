@@ -15,7 +15,8 @@ class Document extends Model
         'type',
         'reference',
         'date',
-        'montant_total',
+       
+        'main_oeuvre', 
         'statut',
     ];
 

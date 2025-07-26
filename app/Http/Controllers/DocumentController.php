@@ -30,17 +30,22 @@ class DocumentController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'type' => 'required|in:devis,facture',
-            'reference' => 'required|string|max:255',
-            'date' => 'required|date',
-            'entreprise_client_id' => 'required|exists:entreprise_clients,id',
-            'client_final_id' => 'required|exists:client_finals,id',
-            'montant_total' => 'nullable|numeric',
-            'statut' => 'nullable|string',
-        ]);
+       $validated = $request->validate([
+    'type' => 'required|in:devis,facture',
+    'reference' => 'required|string|max:255',
+    'date' => 'required|date',
+    'entreprise_client_id' => 'required|exists:entreprise_clients,id',
+    'client_final_id' => 'required|exists:client_finals,id',
+    'montant_total' => 'nullable|numeric',
+    'main_oeuvre' => 'nullable|numeric', // ✅ à ajouter
+    'statut' => 'nullable|string',
+]);
 
-        $document = Document::create($validated);
+$document = Document::create([
+    ...$validated,
+    'main_oeuvre' => $validated['main_oeuvre'] ?? 0, // ✅ enregistrement explicite
+]);
+
 
         return redirect()->route('lignes.create', $document)->with('success', 'Document créé. Ajoutez les lignes.');
     }
@@ -62,12 +67,14 @@ class DocumentController extends Controller
     public function update(Request $request, Document $document)
     {
         $validated = $request->validate([
-            'reference' => 'required|string|unique:documents,reference,' . $document->id,
-            'date' => 'required|date',
-            'statut' => 'required|string',
-        ]);
+    'reference' => 'required|string|unique:documents,reference,' . $document->id,
+    'date' => 'required|date',
+    'statut' => 'required|string',
+    'main_oeuvre' => 'nullable|numeric', // ✅ ajouter ici aussi
+]);
 
-        $document->update($validated);
+$document->update($validated);
+
         return redirect()->route('documents.index')->with('success', 'Document mis à jour.');
     }
 
@@ -77,28 +84,37 @@ class DocumentController extends Controller
         return back()->with('success', 'Document supprimé.');
     }
 
-    public function pdf(Document $document)
+ public function pdf(Document $document)
 {
-    // Calcule total des lignes produits
-$totalMateriel = $document->lignes()
-    ->where('type', 'produit')
-    ->get()
-    ->sum(function($ligne) {
-        return $ligne->prix_unitaire * $ligne->quantite;
-    });
+    // Calcule le total des produits
+    $totalMateriel = $document->lignes()
+        ->where('type', 'produit') // Assure-toi que la colonne "type" existe
+        ->get()
+        ->sum(function ($ligne) {
+            return $ligne->prix_unitaire * $ligne->quantite;
+        });
 
-// Main d’œuvre saisie manuellement
-$mainOeuvre = $document->main_oeuvre ?? 0;
+    // Main d’œuvre saisie manuellement
+    $mainOeuvre = $document->main_oeuvre ?? 0;
 
-// Montant final
-$montantTotal = $totalMateriel + $mainOeuvre;
+    // Montant total
+    $montantTotal = $totalMateriel + $mainOeuvre;
 
-    $montantLettre = $this->convertirMontantEnLettres($totalGeneral);
+    // Conversion en lettres
+    $montantLettre = $this->convertirMontantEnLettres($montantTotal);
 
-    $pdf = Pdf::loadView('documents.pdf', compact('document', 'totalMateriel', 'totalMainOeuvre', 'totalGeneral', 'montantLettre'));
-    
+    // Génération du PDF
+    $pdf = Pdf::loadView('documents.pdf', [
+        'document' => $document,
+        'totalMateriel' => $totalMateriel,
+        'totalMainOeuvre' => $mainOeuvre,
+        'totalGeneral' => $montantTotal,
+        'montantLettre' => $montantLettre,
+    ]);
+
     return $pdf->download("Facture_{$document->reference}.pdf");
 }
+
   private function convertirMontantEnLettres($montant)
 {
     $f = new \NumberToWords\NumberToWords();
